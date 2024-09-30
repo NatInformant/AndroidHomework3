@@ -134,8 +134,8 @@ class MainActivity : AppCompatActivity() {
 
             if (signButtonsEnabledState) return@setOnClickListener
 
-            var a = resultTextView!!.text.subSequence(0, signIndex).toString().toDoubleOrNull()
-            var b = resultTextView!!.text.subSequence(signIndex + 1, resultTextView!!.text.length)
+            val a = if (signIndex == 0) 0.0 else resultTextView!!.text.subSequence(0, signIndex).toString().toDoubleOrNull()
+            val b = resultTextView!!.text.subSequence(signIndex + 1, resultTextView!!.text.length)
                 .toString().toDoubleOrNull()
 
             signButtonsEnabledState = true
@@ -175,8 +175,9 @@ class MainActivity : AppCompatActivity() {
     private fun addStringToResultTextView(numberString: String) {
         resultTextView?.text = resultTextView?.text.toString() + numberString
     }
-    private fun checkIsNeedToClearMistakeMessage(){
-        if (isPreviousTaskMistake) resultTextView?.text=""
+
+    private fun checkIsNeedToClearMistakeMessage() {
+        if (isPreviousTaskMistake) resultTextView?.text = ""
         isPreviousTaskMistake = false
     }
 
