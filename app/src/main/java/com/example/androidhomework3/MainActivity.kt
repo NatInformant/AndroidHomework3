@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     private var signIndex: Int = -1
     private var currentSign: MathSigns? = null
     private var signButtonsEnabledState = true
+    private var isPreviousTaskMistake = false
 
     private var plusButton: TextView? = null
     private var minusButton: TextView? = null
@@ -81,6 +82,11 @@ class MainActivity : AppCompatActivity() {
                 numberButtonClickListener(this.text.toString())
             }
         }
+        with(findViewById<TextView>(R.id.point_button)) {
+            setOnClickListener {
+                numberButtonClickListener(this.text.toString())
+            }
+        }
     }
 
     private fun setUpSignButtonsListeners() {
@@ -107,6 +113,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpBackspaceButtonListener() {
         findViewById<TextView>(R.id.backspace_button).setOnClickListener {
+            checkIsNeedToClearMistakeMessage()
+
             if (resultTextView!!.text.isEmpty()) return@setOnClickListener
 
             if (resultTextView!!.text[resultTextView!!.text.length - 1] in "+-/*") {
@@ -122,24 +130,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpGetResultButtonListener() {
         findViewById<TextView>(R.id.get_result_button).setOnClickListener {
+            checkIsNeedToClearMistakeMessage()
+
             if (signButtonsEnabledState) return@setOnClickListener
 
-            resultTextView!!.text = currentSign!!.value(
-                resultTextView!!.text.subSequence(0, signIndex).toString().toLongOrNull() ?: 0,
-                resultTextView!!.text.subSequence(signIndex+1, resultTextView!!.text.length)
-                    .toString().toLongOrNull() ?: 0
-            ).toString()
+            var a = resultTextView!!.text.subSequence(0, signIndex).toString().toDoubleOrNull()
+            var b = resultTextView!!.text.subSequence(signIndex + 1, resultTextView!!.text.length)
+                .toString().toDoubleOrNull()
 
             signButtonsEnabledState = true
             setUpSignButtonsEnabledState()
+
+            if (a == null || b == null) {
+                resultTextView!!.text = "Ошибка в выражении"
+                isPreviousTaskMistake = true
+                return@setOnClickListener
+            }
+
+            resultTextView!!.text = currentSign!!.value(a, b).toString()
         }
     }
 
     private fun numberButtonClickListener(numberString: String) {
-        resultTextView?.text = resultTextView?.text.toString() + numberString
+        checkIsNeedToClearMistakeMessage()
+
+        addStringToResultTextView(numberString)
     }
 
     private fun signButtonClickListener(signString: String) {
+        checkIsNeedToClearMistakeMessage()
+
         signIndex = resultTextView?.text?.length ?: -1
         currentSign = when (signString) {
             "+" -> MathSigns.Plus
@@ -149,8 +169,15 @@ class MainActivity : AppCompatActivity() {
         }
         signButtonsEnabledState = false
         setUpSignButtonsEnabledState()
-        resultTextView?.text = resultTextView?.text.toString() + signString
+        addStringToResultTextView(signString)
+    }
 
+    private fun addStringToResultTextView(numberString: String) {
+        resultTextView?.text = resultTextView?.text.toString() + numberString
+    }
+    private fun checkIsNeedToClearMistakeMessage(){
+        if (isPreviousTaskMistake) resultTextView?.text=""
+        isPreviousTaskMistake = false
     }
 
     private fun setUpSignButtonsEnabledState() {
@@ -158,8 +185,6 @@ class MainActivity : AppCompatActivity() {
         minusButton!!.isEnabled = signButtonsEnabledState
         divideButton!!.isEnabled = signButtonsEnabledState
         multiplyButton!!.isEnabled = signButtonsEnabledState
-
-
     }
 
     private fun setUpEdgeToEdge() {

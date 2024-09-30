@@ -5,7 +5,7 @@ import com.example.androidhomework3.MathOperations.minus
 import com.example.androidhomework3.MathOperations.multiply
 import com.example.androidhomework3.MathOperations.divide
 
-enum class MathSigns(val value: (Long, Long) -> Long) {
+enum class MathSigns(val value: (Double, Double) -> Double) {
     Plus(value = ::plus),
     Minus(value = ::minus),
     Divide(value = ::divide),
