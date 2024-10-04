@@ -32,59 +32,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNumberButtonsListeners() {
-        with(findViewById<TextView>(R.id.one_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.two_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.three_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.four_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.five_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.six_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.seven_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.eight_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.nine_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.zero_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
-            }
-        }
-        with(findViewById<TextView>(R.id.point_button)) {
-            setOnClickListener {
-                numberButtonClickListener(this.text.toString())
+        listOf(
+            R.id.one_button,
+            R.id.two_button,
+            R.id.three_button,
+            R.id.four_button,
+            R.id.five_button,
+            R.id.six_button,
+            R.id.seven_button,
+            R.id.eight_button,
+            R.id.nine_button,
+            R.id.zero_button,
+            R.id.point_button
+        ).forEach {
+            with(findViewById<TextView>(it)) {
+                setOnClickListener {
+                    numberButtonClickListener(this.text.toString())
+                }
             }
         }
     }
@@ -142,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             signButtonsEnabledState = true
             setUpSignButtonsEnabledState()
 
-            if (a == null || b == null) {
+            if (a == null || b == null || (b == 0.0 && currentSign == MathSigns.Divide)) {
                 resultTextView.text = "Ошибка в выражении"
                 isPreviousTaskMistake = true
                 return@setOnClickListener
