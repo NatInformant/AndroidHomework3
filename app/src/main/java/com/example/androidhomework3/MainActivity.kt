@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            resultTextView.text = currentSign!!.value(a, b).toString()
+            resultTextView.text = currentSign?.value?.invoke(a, b)?.toString() ?: "Ошибка в выражении"
         }
     }
 
